@@ -1,0 +1,95 @@
+#!/usr/bin/lua
+
+local cjson = require("cjson")
+
+local function GetRouterStatus()
+	local json = {}
+	json["deviceName"] = "FH1901"
+	json["clientNum"] = 6
+	json["blackNum"] = 6
+	json["usbNum"] = 2
+	json["lanIP"] = "192.168.0.1"
+	json["lanMAC"] = "C8:3A:35:22:AD:32"
+	json["homePageLink"] = "http://www.tenda.com.cn"
+	json["wanInfo"] = {}
+	local info = {}
+	info[1]={}
+	info[1]["wanStatus"] = "2301007"
+	info[1]["wanIp"] = "220.192.3.1"
+	info[1]["wanUploadSpeed"] = "100"
+	info[1]["wanDownloadSpeed"] = "80"
+	info[2]={}
+	info[2]["wanStatus"] = "1311007"
+	info[2]["wanIp"] = ""
+	info[2]["wanUploadSpeed"] = "123"
+	info[2]["wanDownloadSpeed"] = "76"
+	table.insert(json["wanInfo"], info)
+	json["apStatus"] = "2103001"
+	json["wl24gEn"] = "1"
+	json["wl24gName"] = "fcniuxasdfasdfasdfasdfasdfasdfasdfabababab"
+	json["wl24gsec"] = "1"
+	json["wl5gEn"] = "1"
+	json["wl5gName"] = "fcniux5G"
+	json["wl5gsec"] = "0"
+	local online = {}
+	json["onlineUpgradeInfo"] = {}
+	online["newVersionExist"] = "1"
+	online["curVersion"] = "V2.0.1"
+	online["newVersion"] = "V2.0.10"
+	table.insert(json["onlineUpgradeInfo"], online)
+	str = cjson.encode(json)
+	print(str)
+
+	--[[
+	{
+"deviceName":"FH1901",
+"clientNum":6,
+"blackNum":6,
+"usbNum":"2",
+"lanIP":"192.168.0.1",
+"lanMAC": "C8:3A:35:22:AD:32",
+"workMode":"router",
+"homePageLink":"http://www.tenda.com.cn",
+"wanInfo": [{
+    "wanStatus":"2301007",
+    "wanIp":"220.192.3.1",
+    "wanUploadSpeed":"100",
+    "wanDownloadSpeed":"80"
+    },{
+    "wanStatus":"1311007",
+    "wanIp":"",
+    "wanUploadSpeed":"123",
+    "wanDownloadSpeed":"76"
+    }
+],
+"apStatus":"2103001",
+"wl24gEn": "1",
+"wl24gName":"fcniuxasdfasdfasdfasdfasdfasdfasdfabababab",
+"wl24gsec":"1",
+"wl5gEn":"1",
+"wl5gName":"fcniux5G",
+"wl5gsec":"0",
+"onlineUpgradeInfo": {
+    "newVersionExist": "1",
+    "curVersion": "V2.0.1",
+    "newVersion": "V2.0.10"
+    }
+}
+]]--
+	
+end
+
+local function main()
+	print("Content-type: text/html\n\n")
+	local method = os.getenv("REQUEST_METHOD")
+	if method == "GET" then
+		uri = os.getenv("REQUEST_URI")
+		request = uri:match("goform/(.+)?")
+		if request == "GetRouterStatus" then
+			GetRouterStatus()
+		end
+	end
+	
+end
+
+main()
